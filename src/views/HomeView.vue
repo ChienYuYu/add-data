@@ -14,7 +14,7 @@
   </div>
   <div class="wrapper d-flex">
     <!-- 側邊攔 -->
-    <aside class="side-menu d-flex flex-column">
+    <aside class="side-menu d-flex flex-column position-fixed">
       <h3 class="fw-bolder text-center py-3 mb-0">後台管理</h3>
       <ul class="list-unstyled text-center">
         <li>
@@ -62,7 +62,10 @@ aside.side-menu{
 
 main{
   width: calc(100% - 200px);
+  height: calc(100vh - 44.8px);
   margin-top: 44.8px;
+  margin-left: 200px;
+  overflow-y: auto;
   background: #efefef;
 }
 </style>

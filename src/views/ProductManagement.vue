@@ -1,11 +1,22 @@
 <script setup>
-import { onMounted } from 'vue';
-import { useRoute } from 'vue-router'
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import ProductModal from '../components/ProductModal.vue';
+import axios from 'axios';
+import { useProductStore } from '../stores/productManagement';
 
-const route = useRoute();
+const productStore = useProductStore();
+
+
+// 刪除資料
+async function deleteData(id) {
+  await axios.delete(`http://localhost:3000/products/${id}`)
+  productStore.getProductData();
+}
 
 onMounted(() => {
-  console.log(route.path);
+  // getData()
+  productStore.getProductData();
 })
 
 </script>
@@ -18,55 +29,7 @@ onMounted(() => {
       data-bs-whatever="@mdo">新增品項</button>
   </div>
   <!-- 彈出視窗 -->
-  <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">新增產品</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body d-flex justify-content-around">
-          <form class="col-5 px-2">
-            <div>
-              <label for="product-name" class="col-form-label">品名:</label>
-              <input type="text" class="form-control" id="product-name">
-            </div>
-            <div>
-              <label for="product-category" class="col-form-label">類別:</label>
-              <select class="form-select" aria-label="Default select example" id="product-category">
-                <option selected disabled>請選擇產品類別</option>
-                <option value="1">燈泡</option>
-                <option value="2">檯燈</option>
-                <option value="3">落地燈</option>
-                <option value="4">壁燈</option>
-                <option value="5">吊燈</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="product-price" class="col-form-label">價格:</label>
-              <input type="number" class="form-control" id="product-price">
-            </div>
-            <div class="mb-3">
-              <label for="product-qty" class="col-form-label">庫存:</label>
-              <input type="number" class="form-control" id="product-qty">
-            </div>
-          </form>
-          <form class="col-5 px-2">
-            <div class="mb-3">
-              <label for="formFile" class="form-label mb-0">上傳圖片：</label>
-              <img src="../assets/upload-gbc2294792_640.png" style="width:200px" class="d-block my-3 mx-auto" alt="">
-              <input class="form-control mx-auto" type="file" id="formFile">
-            </div>
-
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-primary">確認</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <ProductModal />
   <!-- 表格 -->
   <div class="px-5">
     <table class="table text-center">
@@ -82,14 +45,14 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th>燈泡</th>
+        <tr v-for="p in productStore.products" :key="p.id">
+          <th>{{ p.category }}</th>
           <th>
-            <img src="../assets/pexels-led-supermarket-577512.jpg" class="product-img">
+            <img :src="p.pic" class="product-img">
           </th>
-          <td>T05 LED燈泡</td>
-          <td>$120</td>
-          <td>99</td>
+          <td>{{ p.title }}</td>
+          <td>${{ p.price }}</td>
+          <td>{{ p.inventory }}</td>
           <td>
             <div class="form-check form-switch d-flex justify-content-center">
               <input class="form-check-input" type="checkbox" role="switch">
@@ -97,7 +60,7 @@ onMounted(() => {
           </td>
           <td>
             <button class="edit btn btn-primary">編輯</button>
-            <button class="delete btn btn-danger">刪除</button>
+            <button class="delete btn btn-danger" @click="deleteData(p.id)">刪除</button>
           </td>
         </tr>
       </tbody>
@@ -107,7 +70,6 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 table {
-
   tr {
     vertical-align: baseline;
   }
