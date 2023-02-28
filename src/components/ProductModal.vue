@@ -9,7 +9,7 @@ const productData = ref({});
 const fileName = ref('');
 const productModalRef = ref(null)
 let productModal;
-const productStore = useProductStore(); 
+const productStore = useProductStore();
 
 // 上傳圖片
 async function uploadImg(e) {
@@ -33,22 +33,43 @@ async function uploadImg(e) {
 
 // 刪除圖片
 async function removeUploadImg() {
-  if(fileName.value !== '') {
+  if (fileName.value !== '') {
     try {
-      const res = await axios.delete(`http://localhost:3000/uploadImg/${fileName.value}`);
-      console.log(res);
+      await axios.delete(`http://localhost:3000/uploadImg/${fileName.value}`);
+      productData.value = {};
     } catch (error) {
       console.log(error);
     }
   }
 }
 
+// // 上傳資料
+// async function sendData() {
+//   try {
+//     await axios.post('http://localhost:3000/addData', productData.value)
+//     // console.log(res);
+//     productStore.getProductData();
+//     productData.value = {};
+//     productModal.hide();
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+
 // 上傳資料
 async function sendData() {
+  // 判斷欄位
+  const pd = productData.value;
+  if(!pd.title || !pd.category || !pd.price || !pd.inventory || !pd.pic) {
+    alert('所欄位、圖片不得為空!!!')
+    return
+  };
+  
   try {
-    const res = await axios.post('http://localhost:3000/addData', productData.value)
+    await axios.post('http://localhost:3000/addData', productData.value)
     // console.log(res);
     productStore.getProductData();
+    productData.value = {};
     productModal.hide();
   } catch (error) {
     console.log(error);
@@ -62,7 +83,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref="productModalRef">
+  <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+    ref="productModalRef">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -99,14 +121,17 @@ onMounted(() => {
           <form class="col-5 px-2">
             <div class="mb-3">
               <label for="formFile" class="form-label mb-0">上傳圖片：</label>
-              <img src="../assets/upload-gbc2294792_640.png" style="width:200px" class="d-block my-3 mx-auto" alt="">
+              <img src="../assets/upload-gbc2294792_640.png" style="width:200px"
+              class="d-block my-3 mx-auto" alt="" v-if="!productData.pic">
+              <img :src="productData.pic" style="width:200px"
+              class="d-block my-3 mx-auto" alt="" v-else>
               <input class="form-control mx-auto" type="file" id="formFile" @change="uploadImg">
             </div>
 
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="removeUploadImg" >取消</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="removeUploadImg">取消</button>
           <button type="button" class="btn btn-primary" @click="sendData">確認</button>
         </div>
       </div>

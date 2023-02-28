@@ -5,7 +5,7 @@ const cors = require('cors');
 const fileupload = require("express-fileupload");
 const { ref, uploadBytes, uploadBytesResumable, getDownloadURL, deleteObject } = require('firebase/storage')
 const { storage, db } = require('./firebase.js')
-const { addDoc, collection, setDoc, doc, getDocs, deleteDoc } = require('firebase/firestore');
+const { addDoc, collection, setDoc, doc, getDocs, deleteDoc, updateDoc } = require('firebase/firestore');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -82,7 +82,9 @@ app.post('/addData', async (req, res) => {
       price,
       inventory,
       pic,
-      id: docRef.id
+      id: docRef.id,
+      selling: false,
+      addTime: new Date().getTime(),
     })
     res.send({ msg: '新增成功' })
   } catch (e) {
@@ -101,7 +103,7 @@ app.get('/products', async (req, res) => {
       // console.log(doc.id, " => ", doc.data());
       tempArr.push(doc.data())
     });
-    res.send({msg: '取得資料', products: tempArr})
+    res.send({ msg: '取得資料', products: tempArr })
   } catch (error) {
     console.log(error);
   }
@@ -116,4 +118,15 @@ app.delete('/products/:id', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`伺服器正在聆聽 ${port} port...`);
+})
+
+// 上下架狀態
+app.patch('/products/:id', async (req, res) => {
+  const id = req.params.id;
+  const { tf } = req.body
+  const productRef = doc(db, "products", id);
+  await updateDoc(productRef, {
+    selling: tf
+  });
+  res.send({ msg: '上架狀態已更改', selling: tf})
 })

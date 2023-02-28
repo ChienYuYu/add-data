@@ -46,16 +46,16 @@ onMounted(() => {
       </thead>
       <tbody>
         <tr v-for="p in productStore.products" :key="p.id">
-          <th>{{ p.category }}</th>
-          <th>
+          <td>{{ p.category }}</td>
+          <td>
             <img :src="p.pic" class="product-img">
-          </th>
+          </td>
           <td>{{ p.title }}</td>
           <td>${{ p.price }}</td>
           <td>{{ p.inventory }}</td>
           <td>
             <div class="form-check form-switch d-flex justify-content-center">
-              <input class="form-check-input" type="checkbox" role="switch">
+              <input class="form-check-input" type="checkbox" role="switch" @change="productStore.sellingStatus(p.id, p.selling)" :checked="p.selling">
             </div>
           </td>
           <td>
@@ -75,8 +75,8 @@ table {
   }
 
   img.product-img {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     object-fit: cover;
   }
 
