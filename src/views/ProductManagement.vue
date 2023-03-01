@@ -1,12 +1,19 @@
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
 import ProductModal from '../components/ProductModal.vue';
 import axios from 'axios';
 import { useProductStore } from '../stores/productManagement';
 
+
 const productStore = useProductStore();
 
+const tempObj = ref({}); // 用於 props
+const addOrEdit = ref(''); // 用於 props
+
+function status(status) {
+  addOrEdit.value = status;
+  tempObj.value = {};
+}
 
 // 刪除資料
 async function deleteData(id) {
@@ -14,8 +21,12 @@ async function deleteData(id) {
   productStore.getProductData();
 }
 
+function editProduct(data) {
+  addOrEdit.value = 'edit'
+  tempObj.value = data;
+}
+
 onMounted(() => {
-  // getData()
   productStore.getProductData();
 })
 
@@ -26,10 +37,10 @@ onMounted(() => {
   <div class="border-bottom d-flex justify-content-between px-5 py-3 mb-5">
     <h3 class="mb-0">【產品管理】</h3>
     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal"
-      data-bs-whatever="@mdo">新增品項</button>
+      data-bs-whatever="@mdo" @click="status('add')">新增品項</button>
   </div>
   <!-- 彈出視窗 -->
-  <ProductModal />
+  <ProductModal :tempObj="tempObj" :addOrEdit="addOrEdit"/>
   <!-- 表格 -->
   <div class="px-5">
     <table class="table text-center">
@@ -59,7 +70,8 @@ onMounted(() => {
             </div>
           </td>
           <td>
-            <button class="edit btn btn-primary">編輯</button>
+            <button class="edit btn btn-primary" @click="editProduct(p)"
+            data-bs-toggle="modal" data-bs-target="#exampleModal">編輯</button>
             <button class="delete btn btn-danger" @click="deleteData(p.id)">刪除</button>
           </td>
         </tr>

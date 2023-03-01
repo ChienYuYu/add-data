@@ -1,15 +1,25 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import axios from 'axios';
 import { Modal } from "bootstrap";
 import { useProductStore } from '../stores/productManagement';
 
+const props = defineProps(['tempObj', 'addOrEdit']); // props
+const tempObj = computed(() => props.tempObj)
+const addOrEdit = computed(() => props.addOrEdit); 
 
-const productData = ref({});
-const fileName = ref('');
 const productModalRef = ref(null)
 let productModal;
+
 const productStore = useProductStore();
+const productData = ref({});
+const fileName = ref('');
+
+watch(tempObj, () => {
+  if(addOrEdit.value === 'add') {
+    productData.value = {}
+  } else { productData.value = props.tempObj; }
+}, { deep: true })
 
 // 上傳圖片
 async function uploadImg(e) {
@@ -43,19 +53,6 @@ async function removeUploadImg() {
   }
 }
 
-// // 上傳資料
-// async function sendData() {
-//   try {
-//     await axios.post('http://localhost:3000/addData', productData.value)
-//     // console.log(res);
-//     productStore.getProductData();
-//     productData.value = {};
-//     productModal.hide();
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
 // 上傳資料
 async function sendData() {
   // 判斷欄位
@@ -67,10 +64,9 @@ async function sendData() {
   
   try {
     await axios.post('http://localhost:3000/addData', productData.value)
-    // console.log(res);
     productStore.getProductData();
-    productData.value = {};
     productModal.hide();
+    productData.value = {};
   } catch (error) {
     console.log(error);
   }
@@ -84,7 +80,7 @@ onMounted(() => {
 
 <template>
   <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-    ref="productModalRef">
+  ref="productModalRef">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
