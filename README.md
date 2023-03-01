@@ -18,12 +18,12 @@
 
 ## 使用方法
 ```javascript
-// 下載後執行
+// 下載後開啟終端機執行
 npm install
 ```
 
 ```javascript
-// 開啟終端機 開啟前端server
+// 開啟前端server
 npm run dev
 ```
 
