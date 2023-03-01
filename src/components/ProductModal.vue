@@ -6,7 +6,7 @@ import { useProductStore } from '../stores/productManagement';
 
 const props = defineProps(['tempObj', 'addOrEdit']); // props
 const tempObj = computed(() => props.tempObj)
-const addOrEdit = computed(() => props.addOrEdit); 
+const addOrEdit = computed(() => props.addOrEdit);
 
 const productModalRef = ref(null)
 let productModal;
@@ -14,9 +14,10 @@ let productModal;
 const productStore = useProductStore();
 const productData = ref({});
 const fileName = ref('');
+const modalLoadingEffect = ref(false)
 
 watch(tempObj, () => {
-  if(addOrEdit.value === 'add') {
+  if (addOrEdit.value === 'add') {
     productData.value = {}
   } else { productData.value = props.tempObj; }
 }, { deep: true })
@@ -31,7 +32,7 @@ async function uploadImg(e) {
   const myUpload = e.target.files[0];
   const formData = new FormData();
   formData.append('yourUpload', myUpload)
-
+  modalLoadingEffect.value = true;
   try {
     const res = await axios.post('http://localhost:3000/uploadImg', formData);
     productData.value.pic = res.data.url;
@@ -39,6 +40,7 @@ async function uploadImg(e) {
   } catch (error) {
     console.log(error);
   }
+  modalLoadingEffect.value = false;
 }
 
 // 刪除圖片
@@ -57,29 +59,32 @@ async function removeUploadImg() {
 async function addData() {
   // 判斷欄位
   const pd = productData.value;
-  if(!pd.title || !pd.category || !pd.price || !pd.inventory || !pd.pic) {
+  if (!pd.title || !pd.category || !pd.price || !pd.inventory || !pd.pic) {
     alert('所欄位、圖片不得為空!!!')
     return
   };
-  
+  modalLoadingEffect.value = true;
   try {
     await axios.post('http://localhost:3000/addData', productData.value)
-    productStore.getProductData();
     productModal.hide();
+    productStore.getProductData();
     productData.value = {};
   } catch (error) {
     console.log(error);
   }
+  modalLoadingEffect.value = false;
 }
 
 // 編輯資料
 async function editData() {
   try {
+    modalLoadingEffect.value = true;
     const id = tempObj.value.id;
     await axios.put(`http://localhost:3000/products/${id}`, productData.value)
     productStore.getProductData();
     productModal.hide();
     productData.value = {};
+    modalLoadingEffect.value = false;
   } catch (error) {
     console.log(error);
   }
@@ -87,8 +92,8 @@ async function editData() {
 
 // 判斷是新增還是編輯
 function checkAddOrEdit() {
-  if(addOrEdit.value === 'add') addData()
-  if(addOrEdit.value === 'edit')  editData()
+  if (addOrEdit.value === 'add') addData()
+  if (addOrEdit.value === 'edit') editData()
 }
 
 onMounted(() => {
@@ -99,8 +104,15 @@ onMounted(() => {
 
 <template>
   <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-  ref="productModalRef">
+    ref="productModalRef">
     <div class="modal-dialog modal-lg">
+      <!-- 載入效果 -->
+      <div class="d-flex justify-content-center align-items-center
+      border position-absolute top-0 start-0 end-0 bottom-0 bg-white bg-opacity-75"
+      style="z-index: 9999;" v-if="modalLoadingEffect">
+        <VueSpinner size="50" color="#fa0"/>
+      </div>
+    <!--  -->
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">新增產品</h1>
@@ -136,10 +148,9 @@ onMounted(() => {
           <form class="col-5 px-2">
             <div class="mb-3">
               <label for="formFile" class="form-label mb-0">上傳圖片：</label>
-              <img src="../assets/upload-gbc2294792_640.png" style="width:200px"
-              class="d-block my-3 mx-auto" alt="" v-if="!productData.pic">
-              <img :src="productData.pic" style="width:200px"
-              class="d-block my-3 mx-auto" alt="" v-else>
+              <img src="../assets/upload-gbc2294792_640.png" style="width:200px" class="d-block my-3 mx-auto" alt=""
+                v-if="!productData.pic">
+              <img :src="productData.pic" style="width:200px" class="d-block my-3 mx-auto" alt="" v-else>
               <input class="form-control mx-auto" type="file" id="formFile" @change="uploadImg">
             </div>
 

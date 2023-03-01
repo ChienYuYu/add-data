@@ -18,7 +18,8 @@
     "firebase": "^9.17.1",
     "pinia": "^2.0.32",
     "vue": "^3.2.47",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vue3-spinners": "^1.2.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",

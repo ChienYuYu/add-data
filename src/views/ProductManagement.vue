@@ -17,7 +17,9 @@ function addProduct() {
 
 // 刪除資料
 async function deleteData(id) {
+  productStore.loading = true;
   await axios.delete(`http://localhost:3000/products/${id}`)
+  productStore.loading = false;
   productStore.getProductData();
 }
 
@@ -33,6 +35,12 @@ onMounted(() => {
 </script>
 
 <template>
+  <!-- 載入效果 -->
+  <div class="bg-white bg-opacity-75 position-fixed top-0 start-0 bottom-0 end-0"
+  v-if="productStore.loading">
+    <VueSpinnerHourglass size="60" color="#f93" class="position-fixed top-50 start-50"/>
+  </div>
+
   <!-- 上方列 -->
   <div class="border-bottom d-flex justify-content-between px-5 py-3 mb-5">
     <h3 class="mb-0">【產品管理】</h3>
