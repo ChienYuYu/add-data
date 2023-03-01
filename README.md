@@ -1,29 +1,37 @@
-# add-product
+# 自製後台管理系統
 
-This template should help get you started developing with Vue 3 in Vite.
+![image](demo_pic/ss01.png)
 
-## Recommended IDE Setup
+## 使用技術、套件
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+|  技術/套件   | 簡述  |
+| :----- | :----- |
+| Vue vite   | 以 Vue.js 開發 SPA 網站 |
+| VueRouter  | 設定路由 |
+| Pinia  | 數據共享 |
+| Bootstrap 5  | 格線系統使用、開發 UI 介面元件使用 |
+|axios|串接後端資料|
+|Node.js / express| 撰寫 API提供前端串接資料 |
+|Firebase Cloud Firestore |儲存資料|
+|Firebase Storage |儲存圖片|
+***
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
+## 使用方法
+```javascript
+// 下載後執行
 npm install
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
+```javascript
+// 開啟終端機 開啟前端server
 npm run dev
 ```
 
-### Compile and Minify for Production
-
-```sh
-npm run build
+```javascript
+// 開新終端機 移至server資料夾
+cd server
+```
+```javascript
+// 開啟後端server
+node server.js
 ```

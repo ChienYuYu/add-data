@@ -88,7 +88,7 @@ app.post('/addData', async (req, res) => {
     })
     res.send({ msg: '新增成功' })
   } catch (e) {
-    console.log(e);
+    res.status(500).send({ msg: '似乎有些問題' });
   }
 })
 
@@ -105,28 +105,55 @@ app.get('/products', async (req, res) => {
     });
     res.send({ msg: '取得資料', products: tempArr })
   } catch (error) {
-    console.log(error);
+    res.status(500).send({ msg: '似乎有些問題' });
   }
 })
 
 //刪除資料
 app.delete('/products/:id', async (req, res) => {
-  const id = req.params.id;
-  await deleteDoc(doc(db, "products", id));
-  res.send({ msg: '刪除成功' })
+  try {
+    const id = req.params.id;
+    await deleteDoc(doc(db, "products", id));
+    res.send({ msg: '刪除成功' })
+  } catch (error) {
+    res.status(500).send({ msg: '似乎有些問題' });
+  }
 })
 
-app.listen(port, () => {
-  console.log(`伺服器正在聆聽 ${port} port...`);
+// 編輯資料
+app.put('/products/:id', async(req, res) => {
+  try {
+    const id = req.params.id;
+    const { title, category, price, inventory, pic } = req.body;
+    const productRef = doc(db, "products", id);
+    await updateDoc(productRef, {
+      title,
+      category,
+      price,
+      inventory,
+      pic
+    });
+    res.send({ msg: '更新成功' })
+  } catch (error) {
+    res.status(500).send({ msg: '似乎有些問題' });
+  }
 })
 
 // 上下架狀態
 app.patch('/products/:id', async (req, res) => {
-  const id = req.params.id;
-  const { tf } = req.body
-  const productRef = doc(db, "products", id);
-  await updateDoc(productRef, {
-    selling: tf
-  });
-  res.send({ msg: '上架狀態已更改', selling: tf})
+  try {
+    const id = req.params.id;
+    const { tf } = req.body;
+    const productRef = doc(db, "products", id);
+    await updateDoc(productRef, {
+      selling: tf
+    });
+    res.send({ msg: '上架狀態已更改', selling: tf})
+  } catch (error) {
+    res.status(500).send({ msg: '似乎有些問題' });
+  }
+})
+
+app.listen(port, () => {
+  console.log(`伺服器正在聆聽 ${port} port...`);
 })

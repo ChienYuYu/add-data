@@ -10,8 +10,8 @@ const productStore = useProductStore();
 const tempObj = ref({}); // 用於 props
 const addOrEdit = ref(''); // 用於 props
 
-function status(status) {
-  addOrEdit.value = status;
+function addProduct() {
+  addOrEdit.value = 'add';
   tempObj.value = {};
 }
 
@@ -37,7 +37,7 @@ onMounted(() => {
   <div class="border-bottom d-flex justify-content-between px-5 py-3 mb-5">
     <h3 class="mb-0">【產品管理】</h3>
     <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal"
-      data-bs-whatever="@mdo" @click="status('add')">新增品項</button>
+      data-bs-whatever="@mdo" @click="addProduct">新增品項</button>
   </div>
   <!-- 彈出視窗 -->
   <ProductModal :tempObj="tempObj" :addOrEdit="addOrEdit"/>

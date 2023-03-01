@@ -54,7 +54,7 @@ async function removeUploadImg() {
 }
 
 // 上傳資料
-async function sendData() {
+async function addData() {
   // 判斷欄位
   const pd = productData.value;
   if(!pd.title || !pd.category || !pd.price || !pd.inventory || !pd.pic) {
@@ -70,6 +70,25 @@ async function sendData() {
   } catch (error) {
     console.log(error);
   }
+}
+
+// 編輯資料
+async function editData() {
+  try {
+    const id = tempObj.value.id;
+    await axios.put(`http://localhost:3000/products/${id}`, productData.value)
+    productStore.getProductData();
+    productModal.hide();
+    productData.value = {};
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// 判斷是新增還是編輯
+function checkAddOrEdit() {
+  if(addOrEdit.value === 'add') addData()
+  if(addOrEdit.value === 'edit')  editData()
 }
 
 onMounted(() => {
@@ -128,7 +147,7 @@ onMounted(() => {
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="removeUploadImg">取消</button>
-          <button type="button" class="btn btn-primary" @click="sendData">確認</button>
+          <button type="button" class="btn btn-primary" @click="checkAddOrEdit">確認</button>
         </div>
       </div>
     </div>
