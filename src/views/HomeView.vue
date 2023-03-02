@@ -8,7 +8,7 @@ const route = useRoute();
   <!-- header -->
   <div class="header bg-dark position-fixed w-100">
     <h1 class="p-2 m-0">
-      <a href="#" class="text-white text-decoration-none d-flex justify-content-center align-items-center">
+      <a href="https://github.com/ChienYuYu/add-product" class="text-white text-decoration-none d-flex justify-content-center align-items-center">
         <i class="bi bi-github h4 mb-0"></i>
         <span class="h6 mb-0 px-2">Chen Chien Yu</span>
       </a>
