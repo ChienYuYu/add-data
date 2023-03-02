@@ -1,4 +1,6 @@
 <script setup>
+import { useRoute } from 'vue-router';
+const route = useRoute();
 
 </script>
 
@@ -18,13 +20,24 @@
       <h3 class="fw-bolder text-center py-3 mb-0">後台管理</h3>
       <ul class="list-unstyled text-center">
         <li>
-          <RouterLink to="/product" class="py-3 d-block text-decoration-none">產品管理</RouterLink>
+          <RouterLink to="/" class="py-3 d-block text-decoration-none"
+          :class="{'active': route.path === '/'}">
+            產品管理</RouterLink>
         </li>
         <li>
-          <a href="#" class="py-3 d-block text-decoration-none">xx管理</a>
+          <RouterLink to="/order" class="py-3 d-block text-decoration-none"
+          :class="{'active': route.path === '/order'}">
+            訂單管理</RouterLink>
         </li>
         <li>
-          <a href="#" class="py-3 d-block text-decoration-none">xx管理</a>
+          <RouterLink to="/coupon" class="py-3 d-block text-decoration-none"
+          :class="{'active': route.path === '/coupon'}">
+            優惠券管理</RouterLink>
+        </li>
+        <li>
+          <RouterLink to="/image" class="py-3 d-block text-decoration-none"
+          :class="{'active': route.path === '/image'}">
+            網站圖片管理</RouterLink>
         </li>
       </ul>
       <a href="#" class="logout text-center d-block mt-auto py-3 text-decoration-none">登出</a>
@@ -57,6 +70,10 @@ aside.side-menu{
   }
   a.logout{
     border-top: 1px solid #bbb;
+  }
+  a.active{
+    background: #555;
+    color: #fa0;
   }  
 }
 
