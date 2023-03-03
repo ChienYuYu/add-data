@@ -116,7 +116,8 @@ onMounted(() => {
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabel">新增/編輯 產品</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button type="button" class="btn-close"
+          data-bs-dismiss="modal" aria-label="Close" @click="removeUploadImg"></button>
         </div>
         <div class="modal-body d-flex justify-content-around">
           <form class="col-5 px-2">

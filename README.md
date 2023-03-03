@@ -1,4 +1,4 @@
-# 自製後台管理系統
+# 自建簡易後台管理系統
 
 ![image](demo_pic/ss01.png)
 ![image](demo_pic/ss02.png)
