@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 // 上傳圖片
 app.post('/uploadImg', (req, res) => {
   const file = req.files.yourUpload.data;
-  const name = req.files.yourUpload.name;
+  const name = new Date().getTime() + req.files.yourUpload.name;
   const storageRef = ref(storage, 'productUpload-bulb/' + name);
   const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -46,7 +46,7 @@ app.post('/uploadImg', (req, res) => {
       // For instance, get the download URL: https://firebasestorage.googleapis.com/...
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
         console.log('File available at', downloadURL);
-        res.send({ msg: '上傳成功', url: downloadURL })
+        res.send({ msg: '上傳成功', url: downloadURL, fileName: name })
       });
     }
   );
@@ -72,7 +72,7 @@ app.delete('/uploadImg/:fileName', (req, res) => {
 // 參閱文件網址 Web verson9 寫法
 // https://firebase.google.com/docs/firestore/manage-data/add-data?hl=zh-tw
 app.post('/addData', async (req, res) => {
-  const { title, category, price, inventory, pic } = req.body;
+  const { title, category, price, inventory, pic, fileName } = req.body;
   try {
     const docRef = await addDoc(collection(db, 'products'), {})  // 先寫入空內容 讓 Firebase自動產生id
     console.log("Document written with ID: ", docRef.id);
@@ -85,6 +85,7 @@ app.post('/addData', async (req, res) => {
       id: docRef.id,
       selling: false,
       addTime: new Date().getTime(),
+      fileName,
     })
     res.send({ msg: '新增成功' })
   } catch (e) {

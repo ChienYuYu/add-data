@@ -15,12 +15,17 @@ function addProduct() {
   tempObj.value = {};
 }
 
-// 刪除資料
-async function deleteData(id) {
-  productStore.loading = true;
-  await axios.delete(`http://localhost:3000/products/${id}`)
-  productStore.loading = false;
-  productStore.getProductData();
+// 刪除媒體庫圖片 然後 刪除資料庫資料
+async function deleteData(id, fileName) {
+  try {
+    productStore.loading = true;
+    await axios.delete(`http://localhost:3000/uploadImg/${fileName}`); // 刪媒體庫圖片
+    await axios.delete(`http://localhost:3000/products/${id}`)// 刪資料庫資料
+    productStore.loading = false;
+    productStore.getProductData();
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function editProduct(data) {
@@ -80,7 +85,7 @@ onMounted(() => {
           <td>
             <button class="edit btn btn-primary" @click="editProduct(p)"
             data-bs-toggle="modal" data-bs-target="#exampleModal">編輯</button>
-            <button class="delete btn btn-danger" @click="deleteData(p.id)">刪除</button>
+            <button class="delete btn btn-danger" @click="deleteData(p.id, p.fileName)">刪除</button>
           </td>
         </tr>
       </tbody>

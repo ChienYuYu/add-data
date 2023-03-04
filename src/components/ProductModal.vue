@@ -13,7 +13,6 @@ let productModal;
 
 const productStore = useProductStore();
 const productData = ref({});
-const fileName = ref('');
 const modalLoadingEffect = ref(false)
 
 watch(tempObj, () => {
@@ -36,7 +35,7 @@ async function uploadImg(e) {
   try {
     const res = await axios.post('http://localhost:3000/uploadImg', formData);
     productData.value.pic = res.data.url;
-    fileName.value = e.target.files[0].name;
+    productData.value.fileName = res.data.fileName;
   } catch (error) {
     console.log(error);
   }
@@ -45,9 +44,9 @@ async function uploadImg(e) {
 
 // 刪除圖片
 async function removeUploadImg() {
-  if (fileName.value !== '') {
+  if (productData.value.fileName !== '') {
     try {
-      await axios.delete(`http://localhost:3000/uploadImg/${fileName.value}`);
+      await axios.delete(`http://localhost:3000/uploadImg/${productData.value.fileName}`);
       productData.value = {};
     } catch (error) {
       console.log(error);
