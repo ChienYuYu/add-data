@@ -49,7 +49,7 @@ onMounted(() => {
   <!-- 上方列 -->
   <div class="border-bottom d-flex justify-content-between px-5 py-3 mb-5">
     <h3 class="mb-0">【產品管理】</h3>
-    <button class="btn btn-success py-1" data-bs-toggle="modal" data-bs-target="#exampleModal"
+    <button class="btn btn-mygreen text-white py-1" data-bs-toggle="modal" data-bs-target="#exampleModal"
       data-bs-whatever="@mdo" @click="addProduct">新增品項</button>
   </div>
   <!-- 彈出視窗 -->
@@ -83,9 +83,9 @@ onMounted(() => {
             </div>
           </td>
           <td>
-            <button class="edit btn btn-primary" @click="editProduct(p)"
+            <button class="edit btn btn-secondary" @click="editProduct(p)"
             data-bs-toggle="modal" data-bs-target="#exampleModal">編輯</button>
-            <button class="delete btn btn-danger" @click="deleteData(p.id, p.fileName)">刪除</button>
+            <button class="delete btn btn-myred text-white" @click="deleteData(p.id, p.fileName)">刪除</button>
           </td>
         </tr>
       </tbody>

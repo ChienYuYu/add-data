@@ -158,7 +158,7 @@ onMounted(() => {
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="removeUploadImg">取消</button>
-          <button type="button" class="btn btn-primary" @click="checkAddOrEdit">確認</button>
+          <button type="button" class="btn btn-myblue text-white" @click="checkAddOrEdit">確認</button>
         </div>
       </div>
     </div>

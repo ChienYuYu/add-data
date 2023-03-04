@@ -65,7 +65,7 @@ aside.side-menu{
     color: #333;
     &:hover{
       background: #333;
-      color: #fa0;
+      color: #fff;
     }
   }
   a.logout{
@@ -73,7 +73,7 @@ aside.side-menu{
   }
   a.active{
     background: #555;
-    color: #fa0;
+    color: #fff;
   }  
 }
 
