@@ -56,7 +56,7 @@ onMounted(() => {
   <ProductModal :tempObj="tempObj" :addOrEdit="addOrEdit"/>
   <!-- 表格 -->
   <div class="px-5">
-    <table class="table text-center">
+    <table class="table text-center mb-0">
       <thead>
         <tr>
           <th scope="col">類別</th>
@@ -91,6 +91,12 @@ onMounted(() => {
       </tbody>
     </table>
   </div>
+  <!-- 分頁導覽 -->
+  <div class="pagination d-flex justify-content-center align-items-center py-4">
+    <button class="pre btn btn-outline-secondary">上一頁</button>
+    <p class="mb-0 px-2">第1頁 / 共10頁</p>
+    <button class="next btn btn-outline-secondary">下一頁</button>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -106,10 +112,19 @@ table {
   }
 
   button.edit {
-    border-radius: .5rem 0 0 .5rem;
+    border-radius: .25rem 0 0 .25rem;
   }
 
   button.delete {
+    border-radius: 0 .25rem .25rem 0;
+  }
+}
+
+div.pagination{
+  button.pre{
+    border-radius: .5rem 0 0 .5rem;
+  }
+  button.next{
     border-radius: 0 .5rem .5rem 0;
   }
 }
