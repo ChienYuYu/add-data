@@ -36,6 +36,7 @@ function editProduct(data) {
 
 onMounted(async() => {
   await productStore.getProductData();
+  productStore.eachPagData = []; // 先清空 不然路由轉跳會重複寫入
   productStore.makePagination();
 })
 
