@@ -1,11 +1,16 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import axios from 'axios';
 
 export const useProductStore = defineStore('productManagement', () => {
 
   const products = ref([]);
   const loading = ref(false);
+
+  // 3/5 temp //////////////
+  const eachPagData= []
+  /////////////////////////
+
 
   // 取得資料 && 做排序
   async function getProductData() {
@@ -21,6 +26,18 @@ export const useProductStore = defineStore('productManagement', () => {
     }
     loading.value = false;
   }
+
+  // ////////////////////////
+  // slice(begin, end(不包含))
+  // Math.ceil() 函式會回傳大於等於所給數字的最小整數。
+  function makePagination() {
+    const totalPage = Math.ceil(products.value.length / 3);
+    for(let i = 0; i<totalPage; i++) {
+      const cutPageArr = products.value.slice(i * 3, i * 3 + 3)
+      eachPagData.value.push(cutPageArr)
+    }
+  }
+  // ///////////////////////
 
   // 更新上下架
   async function sellingStatus(id, tf) {
