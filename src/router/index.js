@@ -16,6 +16,11 @@ const router = createRouter({
           component: () => import('../views/ProductManagement.vue')
         },
         {
+          path: '/user',
+          name: '人員管理',
+          component: () => import('../views/UserManagement.vue')
+        },
+        {
           path: 'order',
           name: '訂單管理',
           component: () => import('../views/OrderManagement.vue')

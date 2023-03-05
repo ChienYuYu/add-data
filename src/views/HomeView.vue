@@ -25,6 +25,11 @@ const route = useRoute();
             產品管理</RouterLink>
         </li>
         <li>
+          <RouterLink to="/user" class="py-3 d-block text-decoration-none"
+          :class="{'active': route.path === '/user'}">
+            人員管理</RouterLink>
+        </li>
+        <li>
           <RouterLink to="/order" class="py-3 d-block text-decoration-none"
           :class="{'active': route.path === '/order'}">
             訂單管理</RouterLink>
