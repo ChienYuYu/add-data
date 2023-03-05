@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import ProductModal from '../components/ProductModal.vue';
+import Pagination from '../components/PaginationView.vue';
 import axios from 'axios';
 import { useProductStore } from '../stores/productManagement';
 
@@ -33,8 +34,9 @@ function editProduct(data) {
   tempObj.value = data;
 }
 
-onMounted(() => {
-  productStore.getProductData();
+onMounted(async() => {
+  await productStore.getProductData();
+  productStore.makePagination();
 })
 
 </script>
@@ -69,7 +71,7 @@ onMounted(() => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in productStore.products" :key="p.id">
+        <tr v-for="p in productStore.eachPagData[productStore.currentPage]" :key="p.id">
           <td>{{ p.category }}</td>
           <td>
             <img :src="p.pic" class="product-img">
@@ -92,11 +94,8 @@ onMounted(() => {
     </table>
   </div>
   <!-- 分頁導覽 -->
-  <div class="pagination d-flex justify-content-center align-items-center py-4">
-    <button class="pre btn btn-outline-secondary">上一頁</button>
-    <p class="mb-0 px-2">第1頁 / 共10頁</p>
-    <button class="next btn btn-outline-secondary">下一頁</button>
-  </div>
+  <Pagination :prePage="productStore.prePage" :nextPage="productStore.nextPage" 
+    :currentPage="productStore.currentPage + 1" :totalPage="productStore.eachPagData.length" />
 </template>
 
 <style lang="scss" scoped>
@@ -117,15 +116,6 @@ table {
 
   button.delete {
     border-radius: 0 .25rem .25rem 0;
-  }
-}
-
-div.pagination{
-  button.pre{
-    border-radius: .5rem 0 0 .5rem;
-  }
-  button.next{
-    border-radius: 0 .5rem .5rem 0;
   }
 }
 </style>
