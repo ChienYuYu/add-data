@@ -27,7 +27,7 @@ const route = useRoute();
         <li>
           <RouterLink to="/user" class="py-3 d-block text-decoration-none"
           :class="{'active': route.path === '/user'}">
-            人員管理</RouterLink>
+            會員管理</RouterLink>
         </li>
         <li>
           <RouterLink to="/order" class="py-3 d-block text-decoration-none"
