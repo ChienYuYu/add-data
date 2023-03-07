@@ -23,6 +23,7 @@ const gender = computed(() => {
   }
 });
 
+
 // 分頁邏輯會用到 /////////
 const eachPagData = ref([]);
 const currentPage = ref(0)
@@ -40,6 +41,8 @@ async function getUserData() {
 
 function showDetail(data) {
   detailData.value = data;
+  detailData.value.dob.date = detailData.value.dob.date.slice(0, 10);
+  detailData.value.registered.date = detailData.value.registered.date.slice(0, 10);
 }
 
 // 分頁邏輯 //////////////////////////////////////////
@@ -114,7 +117,7 @@ onMounted(async () => {
             <img :src="detailData.picture.large" alt="">
             <ul class="mb-0 list-unstyled ps-3">
               <li><span>名字：</span> {{ detailData.name.first }} {{ detailData.name.last }}</li>
-              <li><span>生日：</span> {{ detailData.dob.date.slice(0, 10) }}</li>
+              <li><span>生日：</span> {{ detailData.dob.date }}</li>
               <li><span>年齡：</span> {{ detailData.dob.age }}</li>
               <li><span>性別：</span> {{ detailData.gender }}</li>
               <li><span>電話：</span> {{ detailData.phone }}</li>
@@ -122,7 +125,7 @@ onMounted(async () => {
             </ul>
           </div>
           <ul class="list-unstyled ps-3">
-            <li><span>註冊日期：</span> {{ detailData.registered.date.slice(0, 10) }}</li>
+            <li><span>註冊日期：</span> {{ detailData.registered.date }}</li>
             <li><span>uuid：</span> {{ detailData.login.uuid }}</li>
             <li><span>使用名稱：</span> {{ detailData.login.username }}</li>
             <li><span>國籍：</span> {{ detailData.location.country }}</li>
