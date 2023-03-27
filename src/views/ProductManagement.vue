@@ -7,9 +7,9 @@ import { useProductStore } from '../stores/productManagement';
 
 
 const productStore = useProductStore();
-
 const tempObj = ref({}); // 用於 props
 const addOrEdit = ref(''); // 用於 props
+const renderShow = ref([]); // 用於emit相關
 
 function addProduct() {
   addOrEdit.value = 'add';
@@ -34,10 +34,13 @@ function editProduct(data) {
   tempObj.value = data;
 }
 
-onMounted(async() => {
-  await productStore.getProductData();
-  productStore.eachPagData = []; // 先清空 不然路由轉跳會重複寫入
-  productStore.makePagination();
+// 用於emit接收pagination傳來的資料
+function getPageEmitData(value) {
+  renderShow.value = value;
+}
+
+onMounted(() => {
+  productStore.getProductData();
 })
 
 </script>
@@ -72,7 +75,7 @@ onMounted(async() => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="p in productStore.eachPagData[productStore.currentPage]" :key="p.id">
+        <tr v-for="p in renderShow" :key="p.id">
           <td>{{ p.category }}</td>
           <td>
             <img :src="p.pic" class="product-img">
@@ -94,9 +97,8 @@ onMounted(async() => {
       </tbody>
     </table>
   </div>
-  <!-- 分頁導覽 -->
-  <Pagination :prePage="productStore.prePage" :nextPage="productStore.nextPage" 
-    :currentPage="productStore.currentPage + 1" :totalPage="productStore.eachPagData.length" />
+  <!-- 分頁元件 -->
+    <Pagination  :parentArr="productStore.products" @render-data="getPageEmitData"/>
 </template>
 
 <style lang="scss" scoped>

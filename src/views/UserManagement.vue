@@ -15,6 +15,7 @@ const detailData = ref({
   },
   picture: {},
 });
+const renderShow = ref([]) // 用於emit相關
 
 const gender = computed(() => {
   return (sex) => {
@@ -22,11 +23,6 @@ const gender = computed(() => {
     if (sex === 'female') return '女'
   }
 });
-
-
-// 分頁邏輯會用到 /////////
-const eachPagData = ref([]);
-const currentPage = ref(0)
 
 async function getUserData() {
   loading.value = true;
@@ -45,34 +41,13 @@ function showDetail(data) {
   detailData.value.registered.date = detailData.value.registered.date.slice(0, 10);
 }
 
-// 分頁邏輯 //////////////////////////////////////////
-// slice(begin, end(不包含))
-// Math.ceil() 函式會回傳大於等於所給數字的最小整數。
-// 製作分頁
-function makePagination() {
-  const totalPage = Math.ceil(userData.value.length / 20);
-  for (let i = 0; i < totalPage; i++) {
-    const cutPageArr = userData.value.slice(i * 20, i * 20 + 20)
-    eachPagData.value.push(cutPageArr)
-  }
+// 用於emit接收pagination傳來的資料
+function getPageEmitData(value) {
+  renderShow.value = value;
 }
-// 上一頁
-function prePage() {
-  if (currentPage.value > 0) {
-    currentPage.value--
-  }
-}
-// 下一頁
-function nextPage() {
-  if (currentPage.value < eachPagData.value.length - 1) {
-    currentPage.value++
-  }
-}
-// /////////////////////////////////////////////////
 
-onMounted(async () => {
-  await getUserData();
-  makePagination();
+onMounted(() => {
+  getUserData();
 });
 
 </script>
@@ -160,7 +135,7 @@ onMounted(async () => {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="u in eachPagData[currentPage]" :key="u.id">
+          <tr v-for="u in renderShow" :key="u.id">
           <td>{{ u.name.first }} {{ u.name.last }}</td>
           <td>{{ gender(u.gender) }}</td>
           <td>{{ u.dob.age }}</td>
@@ -174,8 +149,8 @@ onMounted(async () => {
       </tbody>
     </table>
   </div>
-  <!-- 導覽 -->
-  <Pagination :prePage="prePage" :nextPage="nextPage" :currentPage="currentPage + 1" :totalPage="eachPagData.length" />
+  <!-- 分頁元件 -->
+  <Pagination :parentArr="userData" @render-data="getPageEmitData"/>
 </template>
 
 <style lang="scss" scoped>
